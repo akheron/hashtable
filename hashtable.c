@@ -227,20 +227,17 @@ hashtable_t *hashtable_new(key_hash_fn hash_key, key_cmp_fn cmp_keys,
 
 void hashtable_free(hashtable_t *hashtable)
 {
-    if(hashtable->free_key || hashtable->free_value)
+    list_t *list, *next;
+    pair_t *pair;
+    for(list = hashtable->list.next; list != &hashtable->list; list = next)
     {
-        list_t *list, *next;
-        pair_t *pair;
-        for(list = hashtable->list.next; list != &hashtable->list; list = next)
-        {
-            next = list->next;
-            pair = list_to_pair(list);
-            if(hashtable->free_key)
-                hashtable->free_key(pair->key);
-            if(hashtable->free_value)
-                hashtable->free_value(pair->value);
-            free(pair);
-        }
+        next = list->next;
+        pair = list_to_pair(list);
+        if(hashtable->free_key)
+            hashtable->free_key(pair->key);
+        if(hashtable->free_value)
+            hashtable->free_value(pair->value);
+        free(pair);
     }
 
     free(hashtable->buckets);
