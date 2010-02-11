@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 Petri Lehtinen <petri@digip.org>
+ * Copyright (c) 2009, 2010 Petri Lehtinen <petri@digip.org>
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the MIT license. See LICENSE for details.
@@ -13,8 +13,8 @@ typedef int (*key_cmp_fn)(const void *key1, const void *key2);
 typedef void (*free_fn)(void *key);
 
 struct hashtable_list {
-  struct hashtable_list *prev;
-  struct hashtable_list *next;
+    struct hashtable_list *prev;
+    struct hashtable_list *next;
 };
 
 struct hashtable_pair {
@@ -135,6 +135,15 @@ void *hashtable_get(hashtable_t *hashtable, const void *key);
 int hashtable_del(hashtable_t *hashtable, const void *key);
 
 /**
+ * hashtable_clear - Clear hashtable
+ *
+ * @hashtable: The hashtable object
+ *
+ * Removes all items from the hashtable.
+ */
+void hashtable_clear(hashtable_t *hashtable);
+
+/**
  * hashtable_iter - Iterate over hashtable
  *
  * @hashtable: The hashtable object
@@ -150,6 +159,17 @@ int hashtable_del(hashtable_t *hashtable, const void *key);
  * the key/value pair pointed by the old iterator may be deleted.
  */
 void *hashtable_iter(hashtable_t *hashtable);
+
+/**
+ * hashtable_iter_at - Return an iterator at a specific key
+ *
+ * @hashtable: The hashtable object
+ * @key: The key that the iterator should point to
+ *
+ * Like hashtable_iter() but returns an iterator pointing to a
+ * specific key.
+ */
+void *hashtable_iter_at(hashtable_t *hashtable, const void *key);
 
 /**
  * hashtable_iter_next - Advance an iterator
@@ -175,5 +195,13 @@ void *hashtable_iter_key(void *iter);
  * @iter: The iterator
  */
 void *hashtable_iter_value(void *iter);
+
+/**
+ * hashtable_iter_set - Set the value pointed by an iterator
+ *
+ * @iter: The iterator
+ * @value: The value to set
+ */
+void hashtable_iter_set(hashtable_t *hashtable, void *iter, void *value);
 
 #endif
